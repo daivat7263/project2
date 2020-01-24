@@ -13,12 +13,31 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+   
+    var dbLocation = ""
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        let dirs = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        self.dbLocation = dirs[0] + "/login1.db"
+        
+        if !(FileManager.default.fileExists(atPath: self.dbLocation)) {
+            let getPath = Bundle.main.path(forResource: "login1", ofType: "db")
+            do{
+                try FileManager.default.copyItem(atPath: getPath!, toPath: self.dbLocation)
+            }
+            catch (let err as NSError){
+                print("Error in copy \(err.localizedDescription)" )
+            }
+        }
+        print(dbLocation)
+        
         // Override point for customization after application launch.
         return true
     }
+
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
